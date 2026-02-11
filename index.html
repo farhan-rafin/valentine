@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Forever Valentine</title>
+    <title>For My Sweety</title>
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&display=swap');
@@ -15,6 +15,7 @@
             color: #590d22;
             margin: 0;
             padding: 20px;
+            overflow-x: hidden;
         }
 
         .container {
@@ -24,6 +25,8 @@
             padding: 40px;
             border-radius: 30px;
             box-shadow: 0 10px 40px rgba(255, 77, 109, 0.15);
+            position: relative;
+            z-index: 10;
         }
 
         h1 { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #c9184a; margin-bottom: 5px; }
@@ -45,37 +48,6 @@
             border: 1px dashed #ffccd5;
         }
 
-        input {
-            padding: 12px;
-            border-radius: 10px;
-            border: 1px solid #ffccd5;
-            text-align: center;
-            width: 80%;
-            margin-bottom: 5px;
-            outline: none;
-        }
-
-        #hint-display {
-            color: #ff4d6d;
-            font-size: 0.85rem;
-            font-style: italic;
-            min-height: 20px;
-            margin-bottom: 15px;
-        }
-
-        .letter-box {
-            display: none;
-            background: #fdf0f0;
-            padding: 25px;
-            border-left: 5px solid #ff4d6d;
-            margin-top: 20px;
-            text-align: left;
-            font-style: italic;
-            font-size: 0.95rem;
-            line-height: 1.6;
-            border-radius: 0 15px 15px 0;
-        }
-
         .btn {
             padding: 12px 25px;
             font-size: 16px;
@@ -84,21 +56,44 @@
             cursor: pointer;
             transition: 0.3s;
             margin: 10px;
+            font-weight: bold;
         }
 
-        .btn-yes { background: #ff4d6d; color: white; width: 70%; font-weight: bold; }
-        .btn-no { background: #adb5bd; color: white; width: 60px; font-size: 12px; padding: 5px; }
+        .btn-yes { background: #ff4d6d; color: white; width: 70%; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3); }
+        .btn-no { background: #adb5bd; color: white; width: 60px; font-size: 12px; padding: 5px; z-index: 100; }
 
-        .heart-icon { font-size: 40px; cursor: pointer; animation: beat 1s infinite; display: none; margin: 20px 0; }
-        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+        .memory-card {
+            display: none;
+            background: #fdf0f0;
+            padding: 20px;
+            border-left: 5px solid #ff4d6d;
+            margin-top: 15px;
+            text-align: left;
+            font-style: italic;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            animation: fadeIn 0.5s;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+
+        .wedding-timer { font-size: 0.85rem; color: #ff4d6d; margin-top: 15px; font-weight: bold; }
         
-        .wedding-timer {
-            font-size: 1rem;
+        /* Floating Hearts Animation */
+        .heart-float {
+            position: fixed;
+            bottom: -10%;
+            font-size: 20px;
             color: #ff4d6d;
-            margin-top: 20px;
-            font-weight: bold;
-            padding: 10px;
-            border-top: 1px solid #ffccd5;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 4s linear infinite;
+        }
+
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
         }
     </style>
 </head>
@@ -109,90 +104,41 @@
     </audio>
 
     <div class="container">
-        <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Since Jan 1, 2023 | 12:30 AM</p>
-        
-        <img src="https://i.ibb.co/kVgQ8Hwc/481179920-1867086267451580-8846771600766348739-n.jpg" class="main-photo" alt="Sweety">
-
-        <div class="timer-box" id="dayCounter">Counting our moments...</div>
-        
-        <div id="content">
+        <div id="intro-section">
+            <img src="https://i.ibb.co/kVgQ8Hwc/481179920-1867086267451580-8846771600766348739-n.jpg" class="main-photo">
             <h1>Hi Sweety,</h1>
-            <p>Every second since we started has been a treasure. I've missed you so much this past month, and I can't wait for our life together to begin on <b>March 27th</b>.</p>
-            
-            <div id="lock-screen">
-                <p>Unlock my heart with the name I love to call you:</p>
-                <input type="text" id="passInput" placeholder="Enter password...">
-                <div id="hint-display"></div>
-                <button class="btn btn-yes" onclick="verify()">Unlock</button>
-            </div>
-
-            <div class="heart-icon" id="heartBtn" onclick="openHeart()">❤️</div>
-
-            <div id="myLetter" class="letter-box">
-                "To my dearest Sweety,<br><br>
-                This past month of long distance has only made me realize how much I need you by my side. Every day brings us closer to <b>March 27th</b>, and I am so excited to finally call you my wife. Thank you for these incredible years."
-            </div>
-
-            <div id="proposalSection" style="display:none; margin-top: 25px;">
-                <div class="wedding-timer" id="weddingTimer">Loading Wedding Countdown...</div>
-                <h3 style="margin-top: 15px;">Will you be my Valentine?</h3>
-                <button class="btn btn-yes" onclick="celebrate()">YES!</button>
+            <p>Do you want to know how much I love you?</p>
+            <div style="height: 50px;">
+                <button class="btn btn-yes" onclick="startJourney()">YES!</button>
                 <button id="noBtn" class="btn btn-no" onmouseover="dodge()">No</button>
+            </div>
+        </div>
+
+        <div id="memory-section" style="display:none;">
+            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Our Journey Started: 01.01.2023</p>
+            <div class="timer-box" id="dayCounter">Counting our days...</div>
+            
+            <div id="memories">
+                <div class="memory-card" id="m1" style="display:block;"><b>The First Date:</b> That day marked the beginning of my favorite story.</div>
+                <div class="memory-card" id="m2"><b>The First Hug:</b> When I held you, I felt home for the first time.</div>
+                <div class="memory-card" id="m3"><b>The First "I Love You":</b> The moment my world finally made sense.</div>
+                <div class="memory-card" id="m4"><b>The First Roadtrip:</b> Every mile with you is better than the destination.</div>
+            </div>
+
+            <button class="btn btn-yes" id="nextBtn" onclick="nextMemory()" style="margin-top: 20px;">Next Memory</button>
+
+            <div id="gratitude" style="display:none; margin-top:20px;">
+                <p>All my dreams have been fulfilled just because you were there. Thank you for coming into my life and being my everything.</p>
+                <div class="wedding-timer" id="weddingCountdown"></div>
+                <h3>Will you be my Valentine?</h3>
+                <button class="btn btn-yes" onclick="celebrate()">YES!</button>
             </div>
         </div>
     </div>
 
     <script>
-        let fails = 0;
-        const hintList = [
-            "Hint 1: My favorite name of you...",
-            "Hint 2: The name I always call you...",
-            "Hint 3: It starts with an 'S'...",
-            "Hint 4: It's 6 letters long!",
-            "Hint 5: It ends with a 'y'!"
-        ];
-
-        function verify() {
-            const entry = document.getElementById('passInput').value.toLowerCase().trim();
-            if(entry === "sweety") {
-                document.getElementById('lock-screen').style.display = "none";
-                document.getElementById('heartBtn').style.display = "inline-block";
-                alert("Correct! Click the heart to see my message...");
-            } else {
-                if(fails < hintList.length) {
-                    document.getElementById('hint-display').innerText = hintList[fails];
-                    fails++;
-                }
-            }
-        }
-
-        function openHeart() {
-            const music = document.getElementById('bgMusic');
-            music.play();
-            document.getElementById('myLetter').style.display = "block";
-            document.getElementById('proposalSection').style.display = "block";
-        }
-
-        function timers() {
-            // Relationship Start: Jan 1, 2023, 12:30 AM
-            const start = new Date("January 1, 2023 00:30:00").getTime();
-            // Wedding Date: March 27, 2026
-            const wedding = new Date("March 27, 2026 00:00:00").getTime();
-            const now = new Date().getTime();
-            
-            // Days Together
-            const diffS = now - start;
-            const ds = Math.floor(diffS / (1000 * 60 * 60 * 24));
-            const hs = Math.floor((diffS % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("dayCounter").innerHTML = `❤️ ${ds} Days & ${hs} Hours Together ❤️`;
-
-            // Wedding Countdown
-            const diffW = wedding - now;
-            const dw = Math.floor(diffW / (1000 * 60 * 60 * 24));
-            const hw = Math.floor((diffW % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("weddingTimer").innerHTML = `Wedding Countdown: ${dw > 0 ? dw : 0} Days & ${hw > 0 ? hw : 0} Hours`;
-        }
-        setInterval(timers, 1000);
+        let currentM = 1;
+        let heartInterval;
 
         function dodge() {
             const btn = document.getElementById('noBtn');
@@ -201,15 +147,57 @@
             btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
         }
 
+        function createHeart() {
+            const heart = document.createElement('div');
+            heart.classList.add('heart-float');
+            heart.innerHTML = '❤️';
+            heart.style.left = Math.random() * 100 + 'vw';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
+            document.body.appendChild(heart);
+            setTimeout(() => { heart.remove(); }, 4000);
+        }
+
+        function startJourney() {
+            const music = document.getElementById('bgMusic');
+            music.play();
+            document.getElementById('intro-section').style.display = "none";
+            document.getElementById('memory-section').style.display = "block";
+            heartInterval = setInterval(createHeart, 300);
+            updateTimers();
+        }
+
+        function nextMemory() {
+            if (currentM < 4) {
+                currentM++;
+                document.getElementById('m' + currentM).style.display = 'block';
+            } else {
+                document.getElementById('nextBtn').style.display = 'none';
+                document.getElementById('gratitude').style.display = 'block';
+            }
+        }
+
+        function updateTimers() {
+            setInterval(() => {
+                const start = new Date("January 1, 2023 00:30:00").getTime();
+                const wedding = new Date("March 27, 2026").getTime();
+                const now = new Date().getTime();
+                
+                const diffS = now - start;
+                const ds = Math.floor(diffS / (1000 * 60 * 60 * 24));
+                const hs = Math.floor((diffS % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                document.getElementById("dayCounter").innerHTML = `❤️ ${ds} Days & ${hs} Hours Together ❤️`;
+
+                const diffW = wedding - now;
+                const dw = Math.floor(diffW / (1000 * 60 * 60 * 24));
+                document.getElementById("weddingCountdown").innerHTML = `Wedding Countdown: ${dw} Days left!`;
+            }, 1000);
+        }
+
         function celebrate() {
             confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
-            document.getElementById('content').innerHTML = `
-                <h1 style="color: #ff4d6d">I Love You, Sweety!</h1>
-                <p>I can't wait to see you next month. Happy Valentine's Day!</p>
-            `;
             setTimeout(() => {
                 window.location.href = "https://wa.me/8108046941189?text=YES!+I+will+be+your+Valentine!+I+love+you+too+Sweety!";
-            }, 3500);
+            }, 3000);
         }
     </script>
 </body>
