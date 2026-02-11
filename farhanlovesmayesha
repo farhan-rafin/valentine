@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For My Forever Valentine</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Quicksand:wght@300;500&display=swap');
+
+        body {
+            background: #fff5f5;
+            font-family: 'Quicksand', sans-serif;
+            text-align: center;
+            color: #4a4a4a;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 450px;
+            margin: 30px auto;
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+        }
+
+        h1 { font-family: 'Playfair Display', serif; font-style: italic; color: #c9184a; }
+        h2 { color: #ff4d6d; }
+        
+        .timer-box {
+            background: #fff0f3;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+            font-weight: 500;
+            border: 1px solid #ffccd5;
+        }
+
+        .btn {
+            padding: 14px 30px;
+            font-size: 16px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: 0.3s;
+            margin: 10px;
+            width: 80%;
+        }
+
+        .btn-yes { background: #ff4d6d; color: white; }
+        .btn-no { background: #adb5bd; color: white; position: relative; }
+
+        .wedding-alert {
+            background: #ffb3c1;
+            color: #590d22;
+            padding: 10px;
+            border-radius: 5px;
+            font-size: 0.85rem;
+            margin-bottom: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <div class="wedding-alert">Counting down to March 27, 2026 💍</div>
+        
+        <div id="content">
+            <h1>5 Years of Us</h1>
+            <div class="timer-box" id="counter">Calculating our time...</div>
+            
+            <p>It's been a long month without you by my side. Long distance is hard, but it only proves how much I need you.</p>
+            <p><b>I miss you more than words can say.</b></p>
+            
+            <button class="btn btn-yes" onclick="nextQuestion(1)">I have a question...</button>
+        </div>
+    </div>
+
+    <script>
+        // Time Calculation since Dec 8, 2020
+        function updateCounter() {
+            const startDate = new Date("December 8, 2020 00:00:00").getTime();
+            const now = new Date().getTime();
+            const diff = now - startDate;
+
+            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            
+            document.getElementById("counter").innerHTML = days + " Days and " + hours + " Hours together";
+        }
+        setInterval(updateCounter, 1000);
+
+        const content = document.getElementById('content');
+
+        function nextQuestion(step) {
+            if(step === 1) {
+                content.innerHTML = `
+                    <h2>Just one month to go.</h2>
+                    <p>Next month, the distance finally ends and I get to hold you again.</p>
+                    <p>And just a few weeks after that, on <b>March 27th</b>, you become my wife forever.</p>
+                    <button class="btn btn-yes" onclick="nextQuestion(2)">Keep going ❤️</button>
+                `;
+            } else if(step === 2) {
+                content.innerHTML = `
+                    <h1>The Big Question</h1>
+                    <p>Before we walk down that aisle next month...</p>
+                    <h2>Will you be my Valentine one last time as my girlfriend?</h2>
+                    <button class="btn btn-yes" onclick="finalCelebrate()">YES!</button>
+                    <button id="noBtn" class="btn btn-no" onmouseover="moveNo()">No</button>
+                `;
+            }
+        }
+
+        function moveNo() {
+            const btn = document.getElementById('noBtn');
+            const x = Math.random() * (window.innerWidth - 150);
+            const y = Math.random() * (window.innerHeight - 100);
+            btn.style.position = "fixed";
+            btn.style.left = x + 'px';
+            btn.style.top = y + 'px';
+        }
+
+        function finalCelebrate() {
+            content.innerHTML = `
+                <h1 style="color: #ff4d6d">She Said Yes! ❤️</h1>
+                <p>I can't wait to see you next month and never let you go.</p>
+                <p>Happy Valentine's Day to my future wife!</p>
+                <p><i>Redirecting to tell me the good news...</i></p>
+            `;
+            setTimeout(() => {
+                // Replace [+8108046941189] with yours
+                window.location.href = "https://wa.me/+8108046941189?text=YES!+I+will+be+your+Valentine!+I+miss+you+too!";
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
