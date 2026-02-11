@@ -3,122 +3,170 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
     <title>A Story of Us | For Sweety</title>
+    <meta name="description" content="A special memory journey for my Sweety. ❤️">
+    <meta property="og:title" content="A Story of Us | For Sweety">
+    <meta property="og:description" content="I have a question for you... Click to see! ❤️">
+    <meta property="og:image" content="https://i.ibb.co/kVgQ8Hwc/481179920-1867086267451580-8846771600766348739-n.jpg">
+    <meta property="og:type" content="website">
+
     <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&family=Playfair+Display:ital@1&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&display=swap');
 
         body {
-            background: linear-gradient(135deg, #fff5f5 0%, #ffe3e3 100%);
+            background: #fff5f5;
             font-family: 'Quicksand', sans-serif;
             text-align: center;
             color: #590d22;
             margin: 0;
             padding: 20px;
             overflow-x: hidden;
-            min-height: 100vh;
         }
 
         .container {
-            max-width: 420px;
+            max-width: 400px;
             margin: 20px auto;
-            background: rgba(255, 255, 255, 0.95);
+            background: white;
             padding: 40px;
-            border-radius: 40px;
-            box-shadow: 0 20px 60px rgba(255, 77, 109, 0.2);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(255, 77, 109, 0.15);
             position: relative;
             z-index: 10;
-            backdrop-filter: blur(8px);
         }
 
-        h1 { font-family: 'Dancing Script', cursive; font-size: 3rem; color: #c9184a; margin-bottom: 10px; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #c9184a; margin-bottom: 5px; }
         
         .main-photo {
             width: 100%;
-            border-radius: 25px;
-            margin-bottom: 25px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
         }
 
         .timer-box {
-            background: linear-gradient(to right, #fff0f3, #ffccd5);
-            padding: 18px;
-            border-radius: 20px;
-            margin: 25px 0;
+            background: #fff0f3;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 20px 0;
             font-weight: 500;
-            font-size: 1rem;
-            color: #c9184a;
+            font-size: 0.9rem;
+            border: 1px dashed #ffccd5;
         }
 
         .btn {
-            padding: 14px 30px;
+            padding: 12px 25px;
             font-size: 16px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
-            transition: 0.4s;
+            transition: 0.3s;
             margin: 10px;
             font-weight: bold;
+            position: relative;
+            overflow: hidden;
         }
 
-        .btn-yes { background: #ff4d6d; color: white; width: 75%; box-shadow: 0 8px 20px rgba(255, 77, 109, 0.4); }
+        .btn-yes { background: #ff4d6d; color: white; width: 70%; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3); }
         .btn-no { background: #adb5bd; color: white; width: 60px; font-size: 12px; padding: 5px; z-index: 100; }
 
-        input {
-            padding: 15px;
-            border-radius: 15px;
-            border: 2px solid #ffccd5;
-            text-align: center;
-            width: 85%;
-            margin-bottom: 10px;
-            outline: none;
-            font-size: 1.1rem;
+        /* Sparkle Shimmer Effect */
+        .btn-yes::after {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: linear-gradient(to bottom right, rgba(255,255,255,0) 0%, rgba(255,255,255,0.4) 50%, rgba(255,255,255,0) 100%);
+            transform: rotate(45deg);
+            animation: shimmer 3s infinite;
         }
 
-        #hint-display { color: #ff4d6d; font-size: 0.9rem; font-style: italic; min-height: 24px; margin-bottom: 15px; }
+        @keyframes shimmer {
+            0% { transform: translateX(-150%) rotate(45deg); }
+            100% { transform: translateX(150%) rotate(45deg); }
+        }
+
+        input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ffccd5;
+            text-align: center;
+            width: 85%;
+            margin-bottom: 5px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        #hint-display {
+            color: #ff4d6d;
+            font-size: 0.8rem;
+            font-style: italic;
+            min-height: 20px;
+            margin-bottom: 10px;
+        }
 
         .memory-card {
             display: none;
-            background: white;
-            padding: 25px;
-            border-radius: 20px;
-            margin-top: 20px;
+            background: #fdf0f0;
+            padding: 20px;
+            border-left: 5px solid #ff4d6d;
+            margin-top: 15px;
             text-align: left;
-            font-family: 'Playfair Display', serif;
             font-style: italic;
-            font-size: 1.1rem;
-            line-height: 1.6;
-            border-right: 4px solid #ff4d6d;
-            animation: slideIn 0.6s ease-out;
+            font-size: 0.9rem;
+            line-height: 1.5;
+            animation: fadeIn 0.5s;
         }
 
-        @keyframes slideIn { from { opacity: 0; transform: translateX(20px); } to { opacity: 1; transform: translateX(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* Wedding Countdown Circle */
         .countdown-circle {
-            width: 150px;
-            height: 150px;
+            width: 140px;
+            height: 140px;
             border-radius: 50%;
-            border: 4px solid #ff4d6d;
+            border: 3px solid #ff4d6d;
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            margin: 20px auto;
-            background: #fff5f5;
-            box-shadow: 0 0 20px rgba(255, 77, 109, 0.2);
+            margin: 25px auto;
+            background: #fffafa;
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.15);
             animation: pulse 2s infinite;
         }
 
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.03); } 100% { transform: scale(1); } }
 
-        .countdown-days { font-size: 2rem; font-weight: bold; color: #ff4d6d; }
-        .countdown-label { font-size: 0.7rem; text-transform: uppercase; color: #c9184a; letter-spacing: 1px; }
+        .countdown-days { font-size: 2.2rem; font-weight: bold; color: #ff4d6d; line-height: 1; }
+        .countdown-label { font-size: 0.7rem; text-transform: uppercase; color: #c9184a; letter-spacing: 1px; margin-top: 5px; }
 
-        .heart-float { position: fixed; bottom: -10%; font-size: 24px; user-select: none; pointer-events: none; z-index: 1; animation: floatUp 5s linear infinite; }
-        @keyframes floatUp { 0% { transform: translateY(0) rotate(0deg); opacity: 0.8; } 100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; } }
+        .heart-float {
+            position: fixed;
+            bottom: -10%;
+            font-size: 20px;
+            color: #ff4d6d;
+            user-select: none;
+            pointer-events: none;
+            z-index: 1;
+            animation: floatUp 4s linear infinite;
+        }
 
-        .letter-text { font-family: 'Playfair Display', serif; font-size: 1.1rem; line-height: 1.8; color: #4a4a4a; margin: 20px 0; border-top: 1px solid #ffccd5; padding-top: 20px; }
+        @keyframes floatUp {
+            0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(-110vh) rotate(360deg); opacity: 0; }
+        }
+
+        .letter-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: #590d22;
+            margin: 20px 0;
+            padding-top: 15px;
+            border-top: 1px solid #ffccd5;
+        }
     </style>
 </head>
 <body>
@@ -130,10 +178,10 @@
     <div class="container">
         <div id="intro-page">
             <img src="https://i.ibb.co/kVgQ8Hwc/481179920-1867086267451580-8846771600766348739-n.jpg" class="main-photo">
-            <h1>Hi Sweety ✨</h1>
+            <h1>Hi Sweety ❤️</h1>
             <p>I have a question for you...</p>
-            <p style="font-style: italic; color: #888;">Do you want to know how much I love you?</p>
-            <div style="height: 60px; position: relative;">
+            <p style="font-size: 0.9rem; color: #888;">Do you want to know how much I love you?</p>
+            <div style="height: 50px;">
                 <button class="btn btn-yes" onclick="showPasscode()">YES! ❤️</button>
                 <button id="noBtn" class="btn btn-no" onmouseover="dodge()">No</button>
             </div>
@@ -141,33 +189,33 @@
 
         <div id="pass-page" style="display:none;">
             <h1>Unlock My Heart 🔒</h1>
-            <p>Enter the word I call you most:</p>
-            <input type="text" id="passInput" placeholder="Password is our nickname...">
+            <p>Enter the secret word I always call you:</p>
+            <input type="text" id="passInput" placeholder="Enter here...">
             <div id="hint-display"></div>
-            <button class="btn btn-yes" onclick="verify()">Unlock</button>
+            <button class="btn btn-yes" onclick="verify()">Unlock ✨</button>
         </div>
 
         <div id="journey-page" style="display:none;">
-            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; color: #c9184a;">Since Jan 1, 2023</p>
+            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Since Jan 1, 2023 | 12:30 AM</p>
             <div class="timer-box" id="dayCounter">Together...</div>
             
             <div id="memories">
                 <div class="memory-card" id="m1" style="display:block;">🌹 <b>The First Date:</b> That day marked the beginning of my favorite story.</div>
-                <div class="memory-card" id="m2">🫂 <b>The First Hug:</b> I finally felt at home when I held you.</div>
-                <div class="memory-card" id="m3">💘 <b>The First "I Love You":</b> The moment everything felt right.</div>
-                <div class="memory-card" id="m4">🚗 <b>The First Roadtrip:</b> Singing with you on the open road.</div>
+                <div class="memory-card" id="m2">🫂 <b>The First Hug:</b> When I held you, I felt home for the first time.</div>
+                <div class="memory-card" id="m3">💘 <b>The First "I Love You":</b> The moment my world finally made sense.</div>
+                <div class="memory-card" id="m4">🚗 <b>The First Roadtrip:</b> Every mile with you is better than the destination.</div>
             </div>
 
-            <button class="btn btn-yes" id="nextBtn" onclick="nextMemory()" style="margin-top: 30px;">Next Memory ✨</button>
+            <button class="btn btn-yes" id="nextBtn" onclick="nextMemory()" style="margin-top: 20px;">Next Memory ✨</button>
 
-            <div id="final-part" style="display:none; margin-top:30px;">
+            <div id="final-part" style="display:none; margin-top:20px;">
                 <div class="letter-text">
-                    "Sweety, all my dreams were fulfilled because you came into my life. I am counting down the moments until we start our forever on March 27th."
+                    "My Dearest Sweety, all my dreams were fulfilled because you came into my life. Thank you for being my everything. I am counting down to our forever on March 27th."
                 </div>
-                
+
                 <div class="countdown-circle">
                     <div class="countdown-days" id="daysLeft">--</div>
-                    <div class="countdown-label">Days to Forever</div>
+                    <div class="countdown-label">Days to Wedding</div>
                 </div>
 
                 <h3>Will you be my Valentine?</h3>
@@ -179,7 +227,7 @@
     <script>
         let currentM = 1;
         let fails = 0;
-        const hints = ["Hint: Look at the greeting on the first page! ❤️", "Hint: Six letters, starts with 'S'...", "Hint: Ends with 'y'..."];
+        const hints = ["Hint: Look at the first page greeting! ❤️", "Hint: Six letters, starts with 'S'...", "Hint: Ends with 'y'..."];
 
         function dodge() {
             const btn = document.getElementById('noBtn');
@@ -191,12 +239,11 @@
         function createHeart() {
             const heart = document.createElement('div');
             heart.classList.add('heart-float');
-            const icons = ['❤️', '💖', '✨'];
-            heart.innerHTML = icons[Math.floor(Math.random() * icons.length)];
+            heart.innerHTML = '❤️';
             heart.style.left = Math.random() * 100 + 'vw';
-            heart.style.animationDuration = (Math.random() * 3 + 3) + 's';
+            heart.style.animationDuration = (Math.random() * 2 + 2) + 's';
             document.body.appendChild(heart);
-            setTimeout(() => { heart.remove(); }, 5000);
+            setTimeout(() => { heart.remove(); }, 4000);
         }
 
         function showPasscode() {
@@ -221,7 +268,7 @@
             music.play();
             document.getElementById('pass-page').style.display = "none";
             document.getElementById('journey-page').style.display = "block";
-            setInterval(createHeart, 400);
+            setInterval(createHeart, 300);
             updateTimers();
         }
 
@@ -242,7 +289,7 @@
                 const now = new Date().getTime();
                 
                 const ds = Math.floor((now - start) / (1000 * 60 * 60 * 24));
-                document.getElementById("dayCounter").innerHTML = `✨ ${ds} Days of Us ✨`;
+                document.getElementById("dayCounter").innerHTML = `❤️ ${ds} Days Together ❤️`;
 
                 const dw = Math.floor((wedding - now) / (1000 * 60 * 60 * 24));
                 document.getElementById("daysLeft").innerHTML = dw > 0 ? dw : 0;
@@ -250,10 +297,10 @@
         }
 
         function celebrate() {
-            confetti({ particleCount: 250, spread: 100, origin: { y: 0.6 } });
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
             setTimeout(() => {
-                window.location.href = "https://wa.me/8108046941189?text=YES!+I+will+be+your+Valentine!+I+love+you+Sweety!";
-            }, 3500);
+                window.location.href = "https://wa.me/8108046941189?text=YES!+I+will+be+your+Valentine!+I+love+you+too+Sweety!";
+            }, 3000);
         }
     </script>
 </body>
