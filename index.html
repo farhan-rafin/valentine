@@ -62,6 +62,25 @@
         .btn-yes { background: #ff4d6d; color: white; width: 70%; box-shadow: 0 4px 15px rgba(255, 77, 109, 0.3); }
         .btn-no { background: #adb5bd; color: white; width: 60px; font-size: 12px; padding: 5px; z-index: 100; }
 
+        input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 1px solid #ffccd5;
+            text-align: center;
+            width: 85%;
+            margin-bottom: 5px;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        #hint-display {
+            color: #ff4d6d;
+            font-size: 0.8rem;
+            font-style: italic;
+            min-height: 20px;
+            margin-bottom: 10px;
+        }
+
         .memory-card {
             display: none;
             background: #fdf0f0;
@@ -79,7 +98,6 @@
 
         .wedding-timer { font-size: 0.85rem; color: #ff4d6d; margin-top: 15px; font-weight: bold; }
         
-        /* Floating Hearts Animation */
         .heart-float {
             position: fixed;
             bottom: -10%;
@@ -104,19 +122,27 @@
     </audio>
 
     <div class="container">
-        <div id="intro-section">
+        <div id="intro-page">
             <img src="https://i.ibb.co/kVgQ8Hwc/481179920-1867086267451580-8846771600766348739-n.jpg" class="main-photo">
-            <h1>Hi Sweety,</h1>
+            <h1>Hi Sweety ❤️,</h1>
             <p>Do you want to know how much I love you?</p>
             <div style="height: 50px;">
-                <button class="btn btn-yes" onclick="startJourney()">YES!</button>
+                <button class="btn btn-yes" onclick="showPasscode()">YES!</button>
                 <button id="noBtn" class="btn btn-no" onmouseover="dodge()">No</button>
             </div>
         </div>
 
-        <div id="memory-section" style="display:none;">
-            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Our Journey Started: 01.01.2023</p>
-            <div class="timer-box" id="dayCounter">Counting our days...</div>
+        <div id="pass-page" style="display:none;">
+            <h1>Unlock My Heart 🔒</h1>
+            <p>Enter the secret word I always call you:</p>
+            <input type="text" id="passInput" placeholder="Enter here...">
+            <div id="hint-display"></div>
+            <button class="btn btn-yes" onclick="verify()">Unlock Journey</button>
+        </div>
+
+        <div id="journey-page" style="display:none;">
+            <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Since 01.01.2023 | 12:30 AM</p>
+            <div class="timer-box" id="dayCounter">Together...</div>
             
             <div id="memories">
                 <div class="memory-card" id="m1" style="display:block;"><b>The First Date:</b> That day marked the beginning of my favorite story.</div>
@@ -127,18 +153,19 @@
 
             <button class="btn btn-yes" id="nextBtn" onclick="nextMemory()" style="margin-top: 20px;">Next Memory</button>
 
-            <div id="gratitude" style="display:none; margin-top:20px;">
-                <p>All my dreams have been fulfilled just because you were there. Thank you for coming into my life and being my everything.</p>
+            <div id="final-part" style="display:none; margin-top:20px;">
+                <p>"My Dearest Sweety, these years have been the best of my life. All my dreams have been fulfilled just because you were there. Thank you for coming into my life and being my everything."</p>
                 <div class="wedding-timer" id="weddingCountdown"></div>
                 <h3>Will you be my Valentine?</h3>
-                <button class="btn btn-yes" onclick="celebrate()">YES!</button>
+                <button class="btn btn-yes" onclick="celebrate()">YES! ❤️</button>
             </div>
         </div>
     </div>
 
     <script>
         let currentM = 1;
-        let heartInterval;
+        let fails = 0;
+        const hints = ["Hint: My favorite name of you...", "Hint: The name I always call you...", "Hint: It starts with 'S' and ends with 'y'..."];
 
         function dodge() {
             const btn = document.getElementById('noBtn');
@@ -157,12 +184,29 @@
             setTimeout(() => { heart.remove(); }, 4000);
         }
 
+        function showPasscode() {
+            document.getElementById('intro-page').style.display = "none";
+            document.getElementById('pass-page').style.display = "block";
+        }
+
+        function verify() {
+            const val = document.getElementById('passInput').value.toLowerCase().trim();
+            if(val === "sweety") {
+                startJourney();
+            } else {
+                if(fails < hints.length) {
+                    document.getElementById('hint-display').innerText = hints[fails];
+                    fails++;
+                }
+            }
+        }
+
         function startJourney() {
             const music = document.getElementById('bgMusic');
             music.play();
-            document.getElementById('intro-section').style.display = "none";
-            document.getElementById('memory-section').style.display = "block";
-            heartInterval = setInterval(createHeart, 300);
+            document.getElementById('pass-page').style.display = "none";
+            document.getElementById('journey-page').style.display = "block";
+            setInterval(createHeart, 300);
             updateTimers();
         }
 
@@ -172,7 +216,7 @@
                 document.getElementById('m' + currentM).style.display = 'block';
             } else {
                 document.getElementById('nextBtn').style.display = 'none';
-                document.getElementById('gratitude').style.display = 'block';
+                document.getElementById('final-part').style.display = 'block';
             }
         }
 
@@ -182,19 +226,17 @@
                 const wedding = new Date("March 27, 2026").getTime();
                 const now = new Date().getTime();
                 
-                const diffS = now - start;
-                const ds = Math.floor(diffS / (1000 * 60 * 60 * 24));
-                const hs = Math.floor((diffS % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const ds = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+                const hs = Math.floor(((now - start) % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
                 document.getElementById("dayCounter").innerHTML = `❤️ ${ds} Days & ${hs} Hours Together ❤️`;
 
-                const diffW = wedding - now;
-                const dw = Math.floor(diffW / (1000 * 60 * 60 * 24));
-                document.getElementById("weddingCountdown").innerHTML = `Wedding Countdown: ${dw} Days left!`;
+                const dw = Math.floor((wedding - now) / (1000 * 60 * 60 * 24));
+                document.getElementById("weddingCountdown").innerHTML = `Wedding Countdown: ${dw} Days to our Forever!`;
             }, 1000);
         }
 
         function celebrate() {
-            confetti({ particleCount: 150, spread: 70, origin: { y: 0.6 } });
+            confetti({ particleCount: 200, spread: 80, origin: { y: 0.6 } });
             setTimeout(() => {
                 window.location.href = "https://wa.me/8108046941189?text=YES!+I+will+be+your+Valentine!+I+love+you+too+Sweety!";
             }, 3000);
