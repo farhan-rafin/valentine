@@ -3,137 +3,189 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>For My Forever Valentine</title>
+    <title>For My Future Wife</title>
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Quicksand:wght@300;500&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600&family=Quicksand:wght@300;500&display=swap');
 
         body {
             background: #fff5f5;
             font-family: 'Quicksand', sans-serif;
             text-align: center;
-            color: #4a4a4a;
+            color: #590d22;
             margin: 0;
             padding: 20px;
         }
 
         .container {
-            max-width: 450px;
-            margin: 30px auto;
+            max-width: 400px;
+            margin: 20px auto;
             background: white;
             padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.05);
+            border-radius: 30px;
+            box-shadow: 0 10px 40px rgba(255, 77, 109, 0.15);
         }
 
-        h1 { font-family: 'Playfair Display', serif; font-style: italic; color: #c9184a; }
-        h2 { color: #ff4d6d; }
+        h1 { font-family: 'Dancing Script', cursive; font-size: 2.8rem; color: #c9184a; margin-bottom: 5px; }
         
+        .main-photo {
+            width: 100%;
+            border-radius: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+
         .timer-box {
             background: #fff0f3;
             padding: 15px;
-            border-radius: 10px;
+            border-radius: 15px;
             margin: 20px 0;
             font-weight: 500;
+            font-size: 0.9rem;
+            border: 1px dashed #ffccd5;
+        }
+
+        input {
+            padding: 10px;
+            border-radius: 10px;
             border: 1px solid #ffccd5;
+            text-align: center;
+            width: 80%;
+            margin-bottom: 10px;
+            outline: none;
+        }
+
+        .letter-box {
+            display: none;
+            background: #fdf0f0;
+            padding: 25px;
+            border-left: 5px solid #ff4d6d;
+            margin-top: 20px;
+            text-align: left;
+            font-style: italic;
+            font-size: 0.9rem;
+            line-height: 1.6;
+            border-radius: 0 15px 15px 0;
         }
 
         .btn {
-            padding: 14px 30px;
+            padding: 12px 25px;
             font-size: 16px;
             border: none;
             border-radius: 50px;
             cursor: pointer;
             transition: 0.3s;
             margin: 10px;
-            width: 80%;
         }
 
-        .btn-yes { background: #ff4d6d; color: white; }
-        .btn-no { background: #adb5bd; color: white; position: relative; }
+        .btn-yes { background: #ff4d6d; color: white; width: 70%; font-weight: bold; }
+        .btn-no { background: #adb5bd; color: white; width: 60px; font-size: 12px; padding: 5px; }
 
-        .wedding-alert {
-            background: #ffb3c1;
-            color: #590d22;
-            padding: 10px;
-            border-radius: 5px;
-            font-size: 0.85rem;
-            margin-bottom: 20px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-        }
+        .heart-icon { font-size: 35px; cursor: pointer; animation: beat 1s infinite; display: none; margin-top: 10px; }
+        @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
+        
+        .wedding-timer { font-size: 0.8rem; color: #ff4d6d; margin-top: 10px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+    <audio id="bgMusic" loop>
+        <source src="https://www.dropbox.com/scl/fi/z3hvk990987ft8ju14jd2/Katy-Perry-Harleys-In-Hawaii-Official-Audio.mp3?rlkey=5i7svrjt0rpxe24vg821qns9m&st=tzix3vgn&dl=1" type="audio/mpeg">
+    </audio>
+
     <div class="container">
-        <div class="wedding-alert">Counting down to March 27, 2026 💍</div>
+        <p style="font-size: 0.7rem; text-transform: uppercase; letter-spacing: 2px;">Forever Since 08.12.2020</p>
+        
+        <img src="https://i.ibb.co/kVgQ8Hwc/481179920-1867086267451580-8846771600766348739-n.jpg" class="main-photo" alt="Our Favorite Memory">
+
+        <div class="timer-box" id="dayCounter">Calculating our days...</div>
         
         <div id="content">
-            <h1>5 Years of Us</h1>
-            <div class="timer-box" id="counter">Calculating our time...</div>
+            <h1>Hi Mayesha,</h1>
+            <p>Every day apart is a reminder of how much I cherish you. I'm counting every second until I see you next month.</p>
             
-            <p>It's been a long month without you by my side. Long distance is hard, but it only proves how much I need you.</p>
-            <p><b>I miss you more than words can say.</b></p>
-            
-            <button class="btn btn-yes" onclick="nextQuestion(1)">I have a question...</button>
+            <div id="passInput">
+                <p>Type the secret password to unlock my heart:</p>
+                <input type="text" id="passcode" placeholder="Enter password here">
+                <button class="btn btn-yes" onclick="checkPass()">Unlock</button>
+            </div>
+
+            <div class="heart-icon" id="heartBtn" onclick="showLetter()">❤️</div>
+
+            <div id="myLetter" class="letter-box">
+                "My Dearest Mayesha,<br><br>
+                Being in long distance this last month has been tough, but knowing that I’ll see you next month makes it all worth it. I keep thinking about <b>March 27th</b>—the day I finally get to call you my wife. <br><br>
+                Five years of memories, laughter, and love have led us to this moment. You are the best thing that ever happened to me."
+            </div>
+
+            <div id="proposalSection" style="display:none; margin-top: 25px;">
+                <div class="wedding-timer" id="weddingCountdown"></div>
+                <h3 style="margin-top: 15px;">Will you be my Valentine?</h3>
+                <button class="btn btn-yes" onclick="finalCelebrate()">YES!</button>
+                <button id="noBtn" class="btn btn-no" onmouseover="moveNo()">No</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // Time Calculation since Dec 8, 2020
-        function updateCounter() {
-            const startDate = new Date("December 8, 2020 00:00:00").getTime();
-            const now = new Date().getTime();
-            const diff = now - startDate;
-
-            const days = Math.floor(diff / (1000 * 60 * 60 * 24));
-            const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            
-            document.getElementById("counter").innerHTML = days + " Days and " + hours + " Hours together";
-        }
-        setInterval(updateCounter, 1000);
-
-        const content = document.getElementById('content');
-
-        function nextQuestion(step) {
-            if(step === 1) {
-                content.innerHTML = `
-                    <h2>Just one month to go.</h2>
-                    <p>Next month, the distance finally ends and I get to hold you again.</p>
-                    <p>And just a few weeks after that, on <b>March 27th</b>, you become my wife forever.</p>
-                    <button class="btn btn-yes" onclick="nextQuestion(2)">Keep going ❤️</button>
-                `;
-            } else if(step === 2) {
-                content.innerHTML = `
-                    <h1>The Big Question</h1>
-                    <p>Before we walk down that aisle next month...</p>
-                    <h2>Will you be my Valentine one last time as my girlfriend?</h2>
-                    <button class="btn btn-yes" onclick="finalCelebrate()">YES!</button>
-                    <button id="noBtn" class="btn btn-no" onmouseover="moveNo()">No</button>
-                `;
+        function checkPass() {
+            const pass = document.getElementById('passcode').value.toLowerCase().trim();
+            if(pass === "iloveyou") {
+                document.getElementById('passInput').style.display = "none";
+                document.getElementById('heartBtn').style.display = "inline-block";
+                alert("Unlocked! Click the beating heart...");
+            } else {
+                alert("Incorrect password! Hint: Three words, all together. ❤️");
             }
         }
 
+        function showLetter() {
+            const music = document.getElementById('bgMusic');
+            music.play();
+            document.getElementById('myLetter').style.display = "block";
+            document.getElementById('proposalSection').style.display = "block";
+        }
+
+        function updateCounters() {
+            const start = new Date("December 8, 2020").getTime();
+            const wedding = new Date("March 27, 2026").getTime();
+            const now = new Date().getTime();
+            
+            const daysTogether = Math.floor((now - start) / (1000 * 60 * 60 * 24));
+            document.getElementById("dayCounter").innerHTML = "❤️ " + daysTogether + " Days of Loving You ❤️";
+
+            const diffWedding = wedding - now;
+            const d = Math.floor(diffWedding / (1000 * 60 * 60 * 24));
+            const h = Math.floor((diffWedding % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            const m = Math.floor((diffWedding % (1000 * 60 * 60)) / (1000 * 60));
+            document.getElementById("weddingCountdown").innerHTML = `Wedding Countdown: ${d}d ${h}h ${m}m`;
+        }
+        setInterval(updateCounters, 1000);
+
         function moveNo() {
             const btn = document.getElementById('noBtn');
-            const x = Math.random() * (window.innerWidth - 150);
-            const y = Math.random() * (window.innerHeight - 100);
             btn.style.position = "fixed";
-            btn.style.left = x + 'px';
-            btn.style.top = y + 'px';
+            btn.style.left = Math.random() * (window.innerWidth - 100) + 'px';
+            btn.style.top = Math.random() * (window.innerHeight - 50) + 'px';
         }
 
         function finalCelebrate() {
-            content.innerHTML = `
-                <h1 style="color: #ff4d6d">She Said Yes! ❤️</h1>
-                <p>I can't wait to see you next month and never let you go.</p>
-                <p>Happy Valentine's Day to my future wife!</p>
-                <p><i>Redirecting to tell me the good news...</i></p>
+            // Trigger Confetti
+            confetti({
+                particleCount: 150,
+                spread: 70,
+                origin: { y: 0.6 },
+                colors: ['#ff4d6d', '#ffb3c1', '#ffccd5']
+            });
+
+            document.getElementById('content').innerHTML = `
+                <h1 style="color: #ff4d6d">I Love You!</h1>
+                <p>You've made me the luckiest person. See you next month, my future wife! ❤️</p>
+                <p><i>Redirecting to WhatsApp...</i></p>
             `;
             setTimeout(() => {
-                // Replace [+8108046941189] with yours
-                window.location.href = "https://wa.me/+8108046941189?text=YES!+I+will+be+your+Valentine!+I+miss+you+too!";
-            }, 3000);
+                window.location.href = "https://wa.me/8108046941189?text=YES!+I+will+be+your+Valentine!+I+love+you+so+much+and+I+can't+wait+for+March+27th!";
+            }, 4000);
         }
     </script>
 </body>
