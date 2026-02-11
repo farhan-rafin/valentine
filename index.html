@@ -92,7 +92,14 @@
         .heart-icon { font-size: 40px; cursor: pointer; animation: beat 1s infinite; display: none; margin: 20px 0; }
         @keyframes beat { 0%, 100% { transform: scale(1); } 50% { transform: scale(1.3); } }
         
-        .wedding-timer { font-size: 0.85rem; color: #ff4d6d; margin-top: 10px; font-weight: bold; }
+        .wedding-timer {
+            font-size: 1rem;
+            color: #ff4d6d;
+            margin-top: 20px;
+            font-weight: bold;
+            padding: 10px;
+            border-top: 1px solid #ffccd5;
+        }
     </style>
 </head>
 <body>
@@ -127,7 +134,7 @@
             </div>
 
             <div id="proposalSection" style="display:none; margin-top: 25px;">
-                <div class="wedding-timer" id="weddingCountdown"></div>
+                <div class="wedding-timer" id="weddingTimer">Loading Wedding Countdown...</div>
                 <h3 style="margin-top: 15px;">Will you be my Valentine?</h3>
                 <button class="btn btn-yes" onclick="celebrate()">YES!</button>
                 <button id="noBtn" class="btn btn-no" onmouseover="dodge()">No</button>
@@ -138,11 +145,11 @@
     <script>
         let fails = 0;
         const hintList = [
-            "Hint: My favorite name of you...",
-            "Hint: The name I always call you...",
-            "Hint: It's 6 letters long!",
-            "Hint: It starts with an 'S'...",
-            "Hint: It ends with a 'y'..."
+            "Hint 1: My favorite name of you...",
+            "Hint 2: The name I always call you...",
+            "Hint 3: It starts with an 'S'...",
+            "Hint 4: It's 6 letters long!",
+            "Hint 5: It ends with a 'y'!"
         ];
 
         function verify() {
@@ -167,19 +174,23 @@
         }
 
         function timers() {
+            // Relationship Start: Jan 1, 2023, 12:30 AM
             const start = new Date("January 1, 2023 00:30:00").getTime();
-            const wedding = new Date("March 27, 2026").getTime();
+            // Wedding Date: March 27, 2026
+            const wedding = new Date("March 27, 2026 00:00:00").getTime();
             const now = new Date().getTime();
             
+            // Days Together
             const diffS = now - start;
             const ds = Math.floor(diffS / (1000 * 60 * 60 * 24));
             const hs = Math.floor((diffS % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
             document.getElementById("dayCounter").innerHTML = `❤️ ${ds} Days & ${hs} Hours Together ❤️`;
 
+            // Wedding Countdown
             const diffW = wedding - now;
             const dw = Math.floor(diffW / (1000 * 60 * 60 * 24));
             const hw = Math.floor((diffW % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
-            document.getElementById("weddingCountdown").innerHTML = `Wedding Countdown: ${dw}d ${hw}h`;
+            document.getElementById("weddingTimer").innerHTML = `Wedding Countdown: ${dw > 0 ? dw : 0} Days & ${hw > 0 ? hw : 0} Hours`;
         }
         setInterval(timers, 1000);
 
